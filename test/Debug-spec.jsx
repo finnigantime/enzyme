@@ -5,7 +5,7 @@ import {
   indent,
   debugNode,
 } from '../src/Debug';
-import { mount } from '../src/';
+import { mount, shallow } from '../src/';
 import {
   describeWithDOM,
   describeIf,
@@ -447,9 +447,37 @@ describe('debug', () => {
     </Foo>
   </div>
 </Bar>`);
-
       });
 
+    });
+
+  });
+
+  describe('shallow', () => {
+    it('renders shallow wrapper properly', () => {
+      const Foo = props => (
+        <div className="foo">
+          <span>From Foo</span>
+          {props.children}
+        </div>
+      );
+
+      const Bar = () => (
+        <div className="bar">
+          <Foo baz="bax">
+            <span>From Bar</span>
+          </Foo>
+        </div>
+      );
+
+      expect(shallow(<Bar id="2" />).debug()).to.eql(
+`<div className="bar">
+  <Foo baz="bax">
+    <span>
+      From Bar
+    </span>
+  </Foo>
+</div>`);
     });
   });
 });
