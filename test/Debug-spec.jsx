@@ -454,22 +454,29 @@ describe('debug', () => {
 
   });
 
-  describeIf(!REACT013, 'shallow', () => {
+  describe('shallow', () => {
     it('renders shallow wrapper properly', () => {
-      const Foo = props => (
-        <div className="foo">
-          <span>From Foo</span>
-          {props.children}
-        </div>
-      );
-
-      const Bar = () => (
-        <div className="bar">
-          <Foo baz="bax">
-            <span>From Bar</span>
-          </Foo>
-        </div>
-      );
+      class Foo extends React.Component {
+        render() {
+          return (
+            <div className="foo">
+              <span>From Foo</span>
+              {this.props.children}
+            </div>
+          );
+        }
+      }
+      class Bar extends React.Component {
+        render() {
+          return (
+            <div className="bar">
+              <Foo baz="bax">
+                <span>From Bar</span>
+              </Foo>
+            </div>
+          );
+        }
+      }
 
       expect(shallow(<Bar id="2" />).debug()).to.eql(
 `<div className="bar">
@@ -482,13 +489,17 @@ describe('debug', () => {
     });
   });
 
-  describeIf(!REACT013, 'debugNodes', () => {
+  describe('debugNodes', () => {
     it('can render a single node', () => {
-      const Foo = () => (
-        <div className="foo">
-          <span>inside Foo</span>
-        </div>
-      );
+      class Foo extends React.Component {
+        render() {
+          return (
+            <div className="foo">
+              <span>inside Foo</span>
+            </div>
+          );
+        }
+      }
 
       expect(debugNodes(shallow(<Foo />).getNodes())).to.eql(
 `<div className="foo">
@@ -499,19 +510,27 @@ describe('debug', () => {
     });
 
     it('can render multiple nodes', () => {
-      const Foo = () => (
-        <div className="foo">
-          <span>inside Foo</span>
-        </div>
-      );
+      class Foo extends React.Component {
+        render() {
+          return (
+            <div className="foo">
+              <span>inside Foo</span>
+            </div>
+          );
+        }
+      }
 
-      const Bar = () => (
-        <div className="bar">
-          <Foo key="foo1" />
-          <Foo key="foo2" />
-          <Foo key="foo3" />
-        </div>
-      );
+      class Bar extends React.Component {
+        render() {
+          return (
+            <div className="bar">
+              <Foo key="foo1" />
+              <Foo key="foo2" />
+              <Foo key="foo3" />
+            </div>
+          );
+        }
+      }
 
       expect(debugNodes(shallow(<Bar />).children().getNodes())).to.eql(
 `<Foo />
@@ -524,13 +543,17 @@ describe('debug', () => {
     });
 
     it('can render multiple nodes with indent', () => {
-      const Foo = () => (
-        <div className="bar">
-          <span>span1 text</span>
-          <span>span2 text</span>
-          <span>span3 text</span>
-        </div>
-      );
+      class Foo extends React.Component {
+        render() {
+          return (
+            <div className="bar">
+              <span>span1 text</span>
+              <span>span2 text</span>
+              <span>span3 text</span>
+            </div>
+          );
+        }
+      }
 
       expect(debugNodes(shallow(<Foo />).children().getNodes())).to.eql(
 `<span>
