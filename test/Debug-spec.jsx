@@ -4,6 +4,7 @@ import {
   spaces,
   indent,
   debugNode,
+  debugNodes,
 } from '../src/Debug';
 import { mount, shallow } from '../src/';
 import {
@@ -478,6 +479,73 @@ describe('debug', () => {
     </span>
   </Foo>
 </div>`);
+    });
+  });
+
+  describe('debugNodes', () => {
+    it('can render a single node', () => {
+      const Foo = () => (
+        <div className="foo">
+          <span>inside Foo</span>
+        </div>
+      );
+
+      expect(debugNodes(shallow(<Foo />).getNodes())).to.eql(
+`<div className="foo">
+  <span>
+    inside Foo
+  </span>
+</div>`);
+    });
+
+    it('can render multiple nodes', () => {
+      const Foo = () => (
+        <div className="foo">
+          <span>inside Foo</span>
+        </div>
+      );
+
+      const Bar = () => (
+        <div className="bar">
+          <Foo key="foo1" />
+          <Foo key="foo2" />
+          <Foo key="foo3" />
+        </div>
+      );
+
+      expect(debugNodes(shallow(<Bar />).children().getNodes())).to.eql(
+`<Foo />
+
+
+<Foo />
+
+
+<Foo />`);
+    });
+
+    it('can render multiple nodes with indent', () => {
+      const Foo = () => (
+        <div className="bar">
+          <span>span1 text</span>
+          <span>span2 text</span>
+          <span>span3 text</span>
+        </div>
+      );
+
+      expect(debugNodes(shallow(<Foo />).children().getNodes())).to.eql(
+`<span>
+  span1 text
+</span>
+
+
+<span>
+  span2 text
+</span>
+
+
+<span>
+  span3 text
+</span>`);
     });
   });
 });
