@@ -454,7 +454,7 @@ describe('debug', () => {
 
   });
 
-  describe('shallow', () => {
+  describeIf(!REACT013, 'shallow', () => {
     it('renders shallow wrapper properly', () => {
       const Foo = props => (
         <div className="foo">
@@ -482,7 +482,7 @@ describe('debug', () => {
     });
   });
 
-  describe('debugNodes', () => {
+  describeIf(!REACT013, 'debugNodes', () => {
     it('can render a single node', () => {
       const Foo = () => (
         <div className="foo">
