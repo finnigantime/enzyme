@@ -63,24 +63,29 @@ function indentChildren(childrenStrs, indentLength) {
     : '';
 }
 
-export function debugNode(node, indentLength = 2) {
+export function debugNode(node, indentLength = 2, options = {}) {
   if (typeof node === 'string' || typeof node === 'number') return escape(node);
   if (!node) return '';
 
-  const childrenStrs = compact(childrenOfNode(node).map(n => debugNode(n, indentLength)));
+  const childrenStrs = compact(childrenOfNode(node).map(n => debugNode(n, indentLength, options)));
   const type = typeName(node);
-  const props = propsString(node);
-  const beforeProps = props ? ' ' : '';
-  const nodeClose = childrenStrs.length ? `</${type}>` : '/>';
+
+  let props = '';
+  let beforeProps = '';
+  if (!options.ignoreProps) {
+    props = propsString(node);
+    beforeProps = props ? ' ' : '';
+  }
   const afterProps = childrenStrs.length
     ? '>'
     : ' ';
   const childrenIndented = indentChildren(childrenStrs, indentLength);
+  const nodeClose = childrenStrs.length ? `</${type}>` : '/>';
   return `<${type}${beforeProps}${props}${afterProps}${childrenIndented}${nodeClose}`;
 }
 
-export function debugNodes(nodes) {
-  return nodes.map(node => debugNode(node)).join('\n\n\n');
+export function debugNodes(nodes, options) {
+  return nodes.map(node => debugNode(node, undefined, options)).join('\n\n\n');
 }
 
 export function debugInst(inst, indentLength = 2) {

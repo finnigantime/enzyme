@@ -571,4 +571,37 @@ describe('debug', () => {
 </span>`);
     });
   });
+
+  describe('debug options', () => {
+    it('options.ignoreProps causes props to be omitted', () => {
+      class Foo extends React.Component {
+        render() {
+          return (
+            <div className="foo">
+              {this.props.fooVal}
+            </div>
+          );
+        }
+      }
+
+      class Bar extends React.Component {
+        render() {
+          return (
+            <div className="class1">
+              <Foo fooVal="baz" />
+              <span className="class2">span text</span>
+            </div>
+          );
+        }
+      }
+
+      expect(shallow(<Bar />).debug({ ignoreProps: true })).to.eql(
+`<div>
+  <Foo />
+  <span>
+    span text
+  </span>
+</div>`);
+    });
+  });
 });
