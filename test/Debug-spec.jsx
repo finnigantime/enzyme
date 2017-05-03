@@ -454,7 +454,7 @@ describe('debug', () => {
 
   });
 
-  describeIf(!REACT013, 'shallow', () => {
+  describe('shallow', () => {
     it('renders shallow wrapper properly', () => {
       class Foo extends React.Component {
         render() {
@@ -489,7 +489,7 @@ describe('debug', () => {
     });
   });
 
-  describeIf(!REACT013, 'debugNodes', () => {
+  describe('debugNodes', () => {
     it('can render a single node', () => {
       class Foo extends React.Component {
         render() {
